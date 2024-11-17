@@ -1,0 +1,84 @@
+﻿@page "/"
+@using ProtoDefinitions;
+@inject Discount.DiscountClient grpcClient;
+
+<PageTitle>Home</PageTitle>
+
+<h1>Generate Discounts:</h1>
+<div>
+    Amount:
+    <input type="number" id="numAmount" @bind="generationAmount" max="2000" />
+    Code length:
+    <input type="number" id="numCodeLength" @bind="codeLength" min="7" max="8" />
+
+    <button @onclick="Generate">Generate</button>
+</div>
+<h3>@generationResult</h3>
+<hr/>
+
+<h1>Get a Code</h1>
+<div>
+    <button @onclick="GetCode">Get</button>
+</div>
+@if (discountCode != null)
+{
+    <h3>Code: @discountCode</h3>
+}
+<h3>@getCodeResult</h3>
+<hr />
+
+<h1>Use Discounts:</h1>
+<div>
+    Discount code: <input type="text" id="txtDiscountCode" @bind="discountCode" />
+</div>
+<button @onclick="UseCode">Use Code</button>
+<h3>@usingResult</h3>
+
+@code {
+    uint generationAmount = 10;
+    uint codeLength = 8;
+
+    string discountCode;
+    string generationResult;
+    string getCodeResult;
+    string usingResult;
+
+    private async Task Generate()
+    {
+        var response = await grpcClient.GenerateAsync(
+            new GenerateRequest
+                {
+                    Count = generationAmount,
+                    Length = codeLength
+                });
+
+        generationResult = response.Result ?
+            "Generated successfully" :
+            "Generation failed";
+    }
+
+    private async Task GetCode()
+    {
+        var response = await grpcClient.GetCodeAsync(new Empty());
+        if (response.Result)
+        {
+            discountCode = response.Code;
+        }
+        getCodeResult = response.Result ?
+            "Code got successfully" :
+            "Failure on getting code";
+    }
+
+    private async Task UseCode()
+    {
+        var response = await grpcClient.UseCodeAsync(
+            new UseCodeRequest
+                {
+                    Code = discountCode
+                });
+
+        usingResult = response.Result ?
+            "Code used successfully" :
+            "Code using failed";
+    }
+}
