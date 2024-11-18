@@ -73,7 +73,7 @@ public class DiscountService(IDiscountCodesManager discountCodesManager, ILogger
         return new UseCodeResponse { Result = true };
     }
 
-    private static string GenerateRandomCode(uint length)
+    public static string GenerateRandomCode(uint length)
     {
         var chars = new char[length];
         for (var i = 0; i < length; i++)

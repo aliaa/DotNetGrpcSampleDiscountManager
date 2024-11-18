@@ -1,11 +1,12 @@
 This is a sample project for demonstrating gRPC usage in .Net 8
-It consists of 4 projects:
+It consists of 5 projects:
 
 ## Projects
 1. **DiscountManager.Server**: An asp.net core project as a host to gRPC calls
 2. **DiscountManager.BlazorClient**: A simple Blazor web-assembly client to consume gRPC-web messages.
 3. **DiscountManager.ConsoleClient**: A simple Console client to consume gRPC messages.
-3. **DiscountManager.ProtoDefinitions**: A common project referenced on all other projects containing proto files.
+4. **DiscountManager.ProtoDefinitions**: A common project referenced on all other projects containing proto files.
+5. **DiscountManager.Tests**: Some unit tests for testing Server
 
 ## How to run
 1. Have an Sql Server instance running.
